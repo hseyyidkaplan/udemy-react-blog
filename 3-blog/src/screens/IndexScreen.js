@@ -1,10 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Context } from '../context/BlogContext';
 import { Feather } from '@expo/vector-icons' // @?? buradaki on ek olan '@' ne anlama geliyor, githubdan veri cek mi demek?
 
 const IndexScreen = ({ navigation }) => {
-   const { state, deleteBlogPost } = useContext(Context);
+   const { state, deleteBlogPost, getBlogPosts } = useContext(Context);
+
+   useEffect(()=>{
+      getBlogPosts();
+
+      const listener = navigation.addListener('didFocus', () => {
+         getBlogPosts();
+      });
+
+      return () => {
+         listener.remove();
+      };
+   }, []);
 
    return (
       <View>
